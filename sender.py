@@ -18,7 +18,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
     intent_msg = f"ID{ID}"
     print(intent_msg)
     print(CLIENT_HOSTNAME)
-    udp_socket.sendto(intent_msg.encode(), (CLIENT_HOSTNAME, UDP_PORT_SEND))
+    udp_socket.sendto(intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
     
 
 
