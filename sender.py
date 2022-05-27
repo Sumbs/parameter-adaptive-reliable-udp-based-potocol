@@ -2,8 +2,8 @@ import socket
 
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
 SERVER_HOSTNAME = "10.0.7.141"
-UDP_PORT_LISTEN = 9000        # listening port for UDP
-UDP_PORT_SEND = 6750          # sending port for UDP
+UDP_PORT_LISTEN = 6750        # listening port for UDP
+UDP_PORT_SEND = 9000          # sending port for UDP
 ID = "2b97c5ee"
 FILE = "2b97c5ee.txt"
 
