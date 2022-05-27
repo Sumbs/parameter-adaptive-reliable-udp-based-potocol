@@ -18,13 +18,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
     intent_msg = f"ID{ID}"
     print(intent_msg)
     print(CLIENT_HOSTNAME)
+    udp_socket.sendto(intent_msg.encode(), (CLIENT_HOSTNAME, UDP_PORT_SEND))
     
 
 
         
     # receive results of round
-    # data, addr = udp_socket.recvfrom(2048)
-    # print(data.decode(), end="\n\n")
+    data, addr = udp_socket.recvfrom(2048)
+    print(data.decode(), end="\n\n")
 
 
         
