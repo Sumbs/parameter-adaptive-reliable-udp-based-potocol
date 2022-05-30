@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from hashlib import md5
 from pprint import pprint
 from math import inf
 import socket
@@ -28,9 +29,15 @@ def parse_ack(ack):
     chksum = ack[22:]
     return {"sn": sn, "txn": txn, "chksum": chksum}
 
+
 def make_msg(idd, sn, txn, last, payload):
     msg = f"ID{idd}SN{sn:>07d}TXN{txn:>07d}LAST{last}PAYLOAD{payload}"
     return msg
+
+
+def compute_checksum(packet):
+    return hashlib.md5(packet.encode("utf-8")).hexdigest()
+
 
 def get_max_payload_size(udp_socket, txn_number=0):
     SN = 0
@@ -51,12 +58,14 @@ def get_max_payload_size(udp_socket, txn_number=0):
 
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
             print(f"Sent message: {msg}")
+            print(f"Checksum: {compute_checksum(msg)}")
 
             try:
                 data, addr = udp_socket.recvfrom(2048)
                 parse_ack(data.decode())
             except socket.timeout:
                 pass
+
 
 def begin_transaction():
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
