@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from pprint import pprint
-import socket
+from math import inf
+from socket import socket, timeout
 
 # program parameters
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
@@ -10,21 +11,71 @@ UDP_PORT_SEND = 0  # sending port for UDP
 UDP_PORT_LISTEN = 0  # listening port for UDP
 ID = ""
 
+INF = inf
+
+
+def announce(msg):
+    print()
+    print("=" * len(msg))
+    print(msg)
+    print("=" * len(msg))
+
+
+def parse_ack(ack):
+    print(ack)
+    sn = ack[3:10]
+    txn = ack[13:20]
+    chksum = ack[22:]
+    return {"sn": sn, "txn": txn, "chksum": chksum}
+
+def make_msg(idd, sn, txn, last, payload):
+    msg = f"ID{idd}SN{sn:>07d}TXN{txn:>07d}LAST{last}PAYLOAD{payload}"
+    return msg
+
+def get_max_payload_size(udp_socket, txn_number=0):
+    SN = 0
+    TXN = int(txn_number)
+    LAST = 0
+
+    announce("DETERMINING MAXIMUM PAYLOAD SIZE")
+
+    with open(FILE) as file:
+        f = file.read()
+
+        max_payload_size = INF
+        udp_socket.settimeout(0.2)
+
+        for i in range(10, 0, -1):
+            PAYLOAD = f[0:i]
+            msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
+
+            udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
+            print(msg)
+
+            try:
+                data, addr = udp_socket.recvfrom(2048)
+                parse_ack(data.encode())
+            except timeout:
+                pass
 
 def begin_transaction():
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:
+        announce("SENDING INTENT MESSAGE")
 
         # bind receiving socket
         udp_socket.bind((CLIENT_HOSTNAME, UDP_PORT_LISTEN))
 
         # send intent message
         intent_msg = f"ID{ID}"
-        print(f"intent message: {intent_msg}")
-        udp_socket.sendto(intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
+        print(f"Intent message: {intent_msg}")
+        # udp_socket.sendto(intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
 
         # receive results of round
         data, addr = udp_socket.recvfrom(2048)
-        print(data.decode(), end="\n\n")
+        print(f"Transaction ID: {data.decode()}")
+
+        get_max_payload_size(udp_socket, txn_number=data.decode())
+        # get_max_payload_size(udp_socket)
 
 
 if __name__ == "__main__":
@@ -44,6 +95,7 @@ if __name__ == "__main__":
     UDP_PORT_LISTEN = args.c
     ID = args.i
 
+    announce("TRANSACTION DETAILS")
     print(f"File to send: {FILE}")
     print(f"IP address of server: {SERVER_HOSTNAME}")
     print(f"Port used by server: {UDP_PORT_SEND}")
