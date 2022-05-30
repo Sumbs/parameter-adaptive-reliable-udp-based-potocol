@@ -54,7 +54,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
 
             try:
                 data, addr = udp_socket.recvfrom(2048)
-                parse_ack(data.encode())
+                parse_ack(data.decode())
             except socket.timeout:
                 pass
 
