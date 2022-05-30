@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from pprint import pprint
 from math import inf
-from socket import socket, timeout
+import socket
 
 # program parameters
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
@@ -55,7 +55,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             try:
                 data, addr = udp_socket.recvfrom(2048)
                 parse_ack(data.encode())
-            except timeout:
+            except socket.timeout:
                 pass
 
 def begin_transaction():
