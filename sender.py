@@ -53,7 +53,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
         max_payload_size = INF
         udp_socket.settimeout(1)
 
-        for i in range(50, 0, -1):
+        for i in range(40, 0, -1):
             PAYLOAD = f[0:i]
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
