@@ -51,9 +51,9 @@ def get_max_payload_size(udp_socket, txn_number=0):
 
         sent_packets = {}
         max_payload_size = INF
-        udp_socket.settimeout(1)
+        udp_socket.settimeout(0.8)
 
-        for i in range(40, 0, -1):
+        for i in range(35, 0, -1):
             PAYLOAD = f[0:i]
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
@@ -72,8 +72,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             except socket.timeout:
                 pass
         
-        print(f"Max payload size = {max_payload_size}")
-        print("hey")
+        print(f"Max payload size = {max_payload_size} characters")
 
 
 def begin_transaction():
