@@ -49,22 +49,31 @@ def get_max_payload_size(udp_socket, txn_number=0):
     with open(FILE) as file:
         f = file.read()
 
+        sent_packets = {}
         max_payload_size = INF
         udp_socket.settimeout(1)
 
-        for i in range(10, 0, -1):
+        for i in range(50, 0, -1):
             PAYLOAD = f[0:i]
-            msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
 
+            msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
+            chksum = compute_checksum(msg)
+            sent_packets[chksum] = i
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
+
             print(f"Sent message: {msg}")
-            print(f"Checksum: {compute_checksum(msg)}")
+            print(f"Checksum: {chksum}")
 
             try:
                 data, addr = udp_socket.recvfrom(2048)
-                parse_ack(data.decode())
+                ack = parse_ack(data.decode())
+                max_payload_size = sent_packets[ack["chksum"]]
+                break
             except socket.timeout:
                 pass
+        
+        print(f"Max payload size = {max_payload_size}")
+        print("hey")
 
 
 def begin_transaction():
