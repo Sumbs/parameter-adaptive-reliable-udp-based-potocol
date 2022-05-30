@@ -43,7 +43,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
         f = file.read()
 
         max_payload_size = INF
-        udp_socket.settimeout(0.2)
+        udp_socket.settimeout(4)
 
         for i in range(10, 0, -1):
             PAYLOAD = f[0:i]
