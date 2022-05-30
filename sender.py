@@ -36,7 +36,7 @@ def make_msg(idd, sn, txn, last, payload):
 
 
 def compute_checksum(packet):
-    return hashlib.md5(packet.encode("utf-8")).hexdigest()
+    return md5(packet.encode("utf-8")).hexdigest()
 
 
 def get_max_payload_size(udp_socket, txn_number=0):
