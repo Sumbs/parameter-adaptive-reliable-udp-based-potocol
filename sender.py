@@ -68,7 +68,7 @@ def begin_transaction():
         # send intent message
         intent_msg = f"ID{ID}"
         print(f"Intent message: {intent_msg}")
-        # udp_socket.sendto(intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
+        udp_socket.sendto(intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
 
         # receive results of round
         data, addr = udp_socket.recvfrom(2048)
