@@ -22,7 +22,7 @@ def announce(msg):
 
 
 def parse_ack(ack):
-    print(ack)
+    print(f"Received ack: {ack}")
     sn = ack[3:10]
     txn = ack[13:20]
     chksum = ack[22:]
@@ -50,7 +50,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
 
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
-            print(msg)
+            print(f"Sent message: {msg}")
 
             try:
                 data, addr = udp_socket.recvfrom(2048)
