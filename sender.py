@@ -26,7 +26,7 @@ def parse_ack(ack):
     print(f"Received ack: {ack}")
     sn = ack[3:10]
     txn = ack[13:20]
-    chksum = ack[22:]
+    chksum = ack[23:]
     return {"sn": sn, "txn": txn, "chksum": chksum}
 
 
