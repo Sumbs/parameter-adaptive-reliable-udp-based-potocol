@@ -50,6 +50,11 @@ def send_payload(udp_socket, txn_number=0, offset=0):
         f = file.read()
 
         payload_size = offset
+
+        #TESTING
+        payload_size = 2
+
+
         udp_socket.settimeout(None)
 
         while offset < len(f):
@@ -65,7 +70,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             chksum = compute_checksum(msg)
 
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
-            print(f"\nSent message: {msg}")
+            print(f"\nSent message: {msg} ({offset} / {len(f)})")
             print(f"Checksum: {chksum}")
 
             data, addr = udp_socket.recvfrom(2048)
