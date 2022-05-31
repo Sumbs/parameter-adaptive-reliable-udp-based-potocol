@@ -65,7 +65,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             chksum = compute_checksum(msg)
 
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
-            print(f"Sent message: {msg}")
+            print(f"\nSent message: {msg}")
             print(f"Checksum: {chksum}")
 
             data, addr = udp_socket.recvfrom(2048)
@@ -74,7 +74,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             SN += 1
             offset += payload_size
     
-    print("".join(test_list))
+    print(f"\nSent payload: {''.join(test_list)}")
 
 
 def get_max_payload_size(udp_socket, txn_number=0):
