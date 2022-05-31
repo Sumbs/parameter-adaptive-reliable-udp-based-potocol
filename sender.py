@@ -69,6 +69,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             ack = parse_ack(data.decode())
 
             SN += 1
+            offset += payload_size
 
 
 def get_max_payload_size(udp_socket, txn_number=0):
