@@ -75,8 +75,10 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             SN += 1
             offset += payload_size
     
-    print(f"\nSent payload: {''.join(test_list)}")
+    sent = "".join(test_list)
 
+    print(f"\nSent payload: {sent}")
+    print(f"\nSent payload correct?: {sent == f}")
 
 def get_max_payload_size(udp_socket, txn_number=0):
     SN = 0
