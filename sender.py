@@ -14,6 +14,7 @@ ID = ""
 
 INF = inf
 
+test_list = []
 
 def announce(msg):
     print("\n" + "=" * len(msg))
@@ -58,6 +59,8 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 PAYLOAD = f[offset:]
                 LAST = 1
 
+            test_list.append(PAYLOAD)
+
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
             chksum = compute_checksum(msg)
 
@@ -70,6 +73,8 @@ def send_payload(udp_socket, txn_number=0, offset=0):
 
             SN += 1
             offset += payload_size
+    
+    print("".join(test_list))
 
 
 def get_max_payload_size(udp_socket, txn_number=0):
@@ -105,6 +110,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             except socket.timeout:
                 pass
 
+        test_list.append(f[0:max_payload_size])
         print(f"\nMax payload size = {max_payload_size} characters")
 
     send_payload(udp_socket, txn_number=txn_number, offset=max_payload_size)
