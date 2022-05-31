@@ -16,8 +16,7 @@ INF = inf
 
 
 def announce(msg):
-    print()
-    print("=" * len(msg))
+    print("\n" + "=" * len(msg))
     print(msg)
     print("=" * len(msg))
 
@@ -60,6 +59,8 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 LAST = 1
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
+            chksum = compute_checksum(msg)
+
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
             print(f"Sent message: {msg}")
             print(f"Checksum: {chksum}")
@@ -103,7 +104,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             except socket.timeout:
                 pass
 
-        print(f"Max payload size = {max_payload_size} characters")
+        print(f"\nMax payload size = {max_payload_size} characters")
 
     send_payload(udp_socket, txn_number=txn_number, offset=max_payload_size)
 
