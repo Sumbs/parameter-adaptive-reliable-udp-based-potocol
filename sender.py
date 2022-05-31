@@ -51,10 +51,6 @@ def send_payload(udp_socket, txn_number=0, offset=0):
 
         payload_size = offset
 
-        #TESTING
-        payload_size = 2
-
-
         udp_socket.settimeout(None)
 
         while offset < len(f):
