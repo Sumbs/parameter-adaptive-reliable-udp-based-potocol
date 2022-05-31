@@ -99,7 +99,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
             sent_packets[chksum] = i
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
 
-            print(f"Sent message: {msg}")
+            print(f"\nSent message: {msg}")
             print(f"Checksum: {chksum}")
 
             try:
