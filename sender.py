@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from hashlib import md5
-from pprint import pprint
 from math import inf
 import socket
 
@@ -48,19 +47,20 @@ def send_payload(udp_socket, txn_number=0, offset=0):
 
     with open(FILE) as file:
         f = file.read()
+        maxlen = int(len(f) * .55)
 
         payload_size = offset
 
         udp_socket.settimeout(None)
 
-        while offset < len(f):
-            if offset + payload_size < len(f):
+        while offset < maxlen:
+            if offset + payload_size < maxlen:
                 PAYLOAD = f[offset : offset + payload_size]
             else:
                 PAYLOAD = f[offset:]
                 LAST = 1
 
-            test_list.append(PAYLOAD)
+            # test_list.append(PAYLOAD)
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
             chksum = compute_checksum(msg)
@@ -75,10 +75,10 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             SN += 1
             offset += payload_size
     
-    sent = "".join(test_list)
+    # sent = "".join(test_list)
 
-    print(f"\nSent payload: {sent}")
-    print(f"\nSent payload correct?: {sent == f}")
+    # print(f"\nSent payload: {sent}")
+    # print(f"\nSent payload correct?: {sent == f}")
 
 def get_max_payload_size(udp_socket, txn_number=0):
     SN = 0
