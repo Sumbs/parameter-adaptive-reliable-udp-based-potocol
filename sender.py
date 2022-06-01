@@ -51,7 +51,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
 
         payload_size = offset
 
-        udp_socket.settimeout(None)
+        udp_socket.settimeout(30)
 
         while offset < maxlen:
             if offset + payload_size < maxlen:
