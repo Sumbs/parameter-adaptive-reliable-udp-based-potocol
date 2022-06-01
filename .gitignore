@@ -1,5 +1,0 @@
-*.pdf
-*.txt
-*.py
-.gitignore
-!sender.py
