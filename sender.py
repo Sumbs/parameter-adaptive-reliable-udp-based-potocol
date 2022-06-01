@@ -75,7 +75,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 SN += 1
                 offset += payload_size
             except socket.timeout:
-                pass
+                break
     
     # sent = "".join(test_list)
 
