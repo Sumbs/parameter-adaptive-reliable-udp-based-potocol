@@ -59,8 +59,6 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 PAYLOAD = f[offset:]
                 LAST = 1
 
-            # test_list.append(PAYLOAD)
-
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
             chksum = compute_checksum(msg)
 
@@ -115,7 +113,6 @@ def get_max_payload_size(udp_socket, txn_number=0):
             except socket.timeout:
                 payload_size = int(payload_size * 0.95)
 
-        # test_list.append(f[0:payload_size])
         print(f"\nMax payload size = {payload_size} characters")
 
     send_payload(udp_socket, txn_number=txn_number, offset=payload_size)
