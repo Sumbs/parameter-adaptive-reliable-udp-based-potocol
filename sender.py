@@ -13,7 +13,6 @@ ID = "2b97c5ee"
 
 INF = inf
 
-test_list = []
 
 def announce(msg):
     print("\n" + "=" * len(msg))
@@ -76,55 +75,9 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 offset += payload_size
             except socket.timeout:
                 break
-    
-    # sent = "".join(test_list)
 
-    # print(f"\nSent payload: {sent}")
-    # print(f"\nSent payload correct?: {sent == f}")
+    announce("TRANSACTION TERMINATED")
 
-def send_payload_test(udp_socket, txn_number=0, payload_size=0):
-    SN = 0
-    TXN = int(txn_number)
-    LAST = 0
-
-    offset = 0
-
-    announce("SENDING PAYLOAD")
-
-    with open(FILE) as file:
-        f = file.read()
-        maxlen = len(f)
-
-        udp_socket.settimeout(30)
-
-        while offset < maxlen:
-            if offset + payload_size < maxlen:
-                PAYLOAD = f[offset : offset + payload_size]
-            else:
-                PAYLOAD = f[offset:]
-                LAST = 1
-
-            # test_list.append(PAYLOAD)
-
-            msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
-            chksum = compute_checksum(msg)
-
-            udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
-            print(f"\nSent message: {msg} ({offset} / {len(f)})")
-            print(f"Checksum: {chksum}")
-
-            try:
-                data, addr = udp_socket.recvfrom(2048)
-                ack = parse_ack(data.decode())
-                SN += 1
-                offset += payload_size
-            except socket.timeout:
-                break
-    
-    # sent = "".join(test_list)
-
-    # print(f"\nSent payload: {sent}")
-    # print(f"\nSent payload correct?: {sent == f}")
 
 def get_max_payload_size(udp_socket, txn_number=0):
     SN = 0
@@ -137,7 +90,7 @@ def get_max_payload_size(udp_socket, txn_number=0):
         f = file.read()
 
         sent_packets = {}
-        payload_size = int(len(f) * .1)
+        payload_size = int(len(f) * 0.125)
         udp_socket.settimeout(0.5)
 
         while True:
@@ -145,8 +98,9 @@ def get_max_payload_size(udp_socket, txn_number=0):
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
             chksum = compute_checksum(msg)
-            sent_packets[chksum] = payload_size
             udp_socket.sendto(msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND))
+
+            sent_packets[chksum] = payload_size
 
             print(f"\nSent message: {msg}")
             print(f"Checksum: {chksum}")
@@ -159,8 +113,8 @@ def get_max_payload_size(udp_socket, txn_number=0):
                 payload_size = sent_packets[ack["chksum"]]
                 break
             except socket.timeout:
-                payload_size = int(payload_size * .9)
-        
+                payload_size = int(payload_size * 0.95)
+
         # test_list.append(f[0:payload_size])
         print(f"\nMax payload size = {payload_size} characters")
 
@@ -183,8 +137,7 @@ def begin_transaction():
         data, addr = udp_socket.recvfrom(2048)
         print(f"Transaction ID: {data.decode()}")
 
-        # get_max_payload_size(udp_socket, txn_number=data.decode())
-        send_payload_test(udp_socket, txn_number=data.decode(), payload_size=55)
+        get_max_payload_size(udp_socket, txn_number=data.decode())
 
 
 if __name__ == "__main__":
