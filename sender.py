@@ -69,11 +69,13 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             print(f"\nSent message: {msg} ({offset} / {len(f)})")
             print(f"Checksum: {chksum}")
 
-            data, addr = udp_socket.recvfrom(2048)
-            ack = parse_ack(data.decode())
-
-            SN += 1
-            offset += payload_size
+            try:
+                data, addr = udp_socket.recvfrom(2048)
+                ack = parse_ack(data.decode())
+                SN += 1
+                offset += payload_size
+            except socket.timeout:
+                pass
     
     # sent = "".join(test_list)
 
