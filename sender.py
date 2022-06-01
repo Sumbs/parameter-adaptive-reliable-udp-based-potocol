@@ -5,11 +5,11 @@ import socket
 
 # program parameters
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
-FILE = ""  # file to be sent by client
-SERVER_HOSTNAME = ""
-UDP_PORT_SEND = 0  # sending port for UDP
-UDP_PORT_LISTEN = 0  # listening port for UDP
-ID = ""
+FILE = "2b97c5ee.txt"  # file to be sent by client
+SERVER_HOSTNAME = "10.0.7.141"
+UDP_PORT_SEND = 9000  # sending port for UDP
+UDP_PORT_LISTEN = 6750 # listening port for UDP
+ID = "2b97c5ee"
 
 INF = inf
 
@@ -39,7 +39,7 @@ def compute_checksum(packet):
 
 
 def send_payload(udp_socket, txn_number=0, offset=0):
-    SN = 1
+    SN = 0
     TXN = int(txn_number)
     LAST = 0
 
@@ -49,9 +49,9 @@ def send_payload(udp_socket, txn_number=0, offset=0):
         f = file.read()
         maxlen = len(f)
 
-        payload_size = offset
+        payload_size = int(maxlen / 2)
 
-        udp_socket.settimeout(30)
+        udp_socket.settimeout(0.5)
 
         while offset < maxlen:
             if offset + payload_size < maxlen:
@@ -60,8 +60,6 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 PAYLOAD = f[offset:]
                 LAST = 1
 
-            # test_list.append(PAYLOAD)
-
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
             chksum = compute_checksum(msg)
 
@@ -69,16 +67,15 @@ def send_payload(udp_socket, txn_number=0, offset=0):
             print(f"\nSent message: {msg} ({offset} / {len(f)})")
             print(f"Checksum: {chksum}")
 
-            data, addr = udp_socket.recvfrom(2048)
-            ack = parse_ack(data.decode())
-
-            SN += 1
-            offset += payload_size
+            try:
+                data, addr = udp_socket.recvfrom(2048)
+                ack = parse_ack(data.decode())
+                SN += 1
+                offset += payload_size
+                udp_socket.settimeout(None)
+            except socket.timeout:
+                payload_size = int(len(payload_size) * .95)
     
-    # sent = "".join(test_list)
-
-    # print(f"\nSent payload: {sent}")
-    # print(f"\nSent payload correct?: {sent == f}")
 
 
 def begin_transaction():
@@ -97,7 +94,7 @@ def begin_transaction():
         data, addr = udp_socket.recvfrom(2048)
         print(f"Transaction ID: {data.decode()}")
 
-        get_max_payload_size(udp_socket, txn_number=data.decode())
+        send_payload(udp_socket, txn_number=data.decode())
 
 
 if __name__ == "__main__":
