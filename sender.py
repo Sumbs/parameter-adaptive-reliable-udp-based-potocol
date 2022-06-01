@@ -74,8 +74,8 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 offset += payload_size
                 udp_socket.settimeout(None)
             except socket.timeout:
-                payload_size = int(len(payload_size) * .95)
-    
+                payload_size = int(payload_size * .95)
+                print(f"payload size: {payload_size} bytes")
 
 
 def begin_transaction():
