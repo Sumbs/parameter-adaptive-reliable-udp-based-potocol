@@ -49,7 +49,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
         f = file.read()
         maxlen = len(f)
 
-        payload_size = int(maxlen / 2)
+        payload_size = int(maxlen / 10)
 
         udp_socket.settimeout(0.5)
 
