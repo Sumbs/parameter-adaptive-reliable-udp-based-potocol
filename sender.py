@@ -5,11 +5,11 @@ import socket
 
 # program parameters
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
-FILE = ""  # file to be sent by client
-SERVER_HOSTNAME = ""
-UDP_PORT_SEND = 0  # sending port for UDP
-UDP_PORT_LISTEN = 0  # listening port for UDP
-ID = ""
+FILE = "file.txt"  # file to be sent by client
+SERVER_HOSTNAME = "10.0.7.141"
+UDP_PORT_SEND = 9000  # sending port for UDP
+UDP_PORT_LISTEN = 6750  # listening port for UDP
+ID = "2b97c5ee"
 
 INF = inf
 
