@@ -1,5 +1,5 @@
 *.pdf
-Holjjang*\.py
-test\.py
-cmdargs\.txt
-ssh\.txt
+*.txt
+*.py
+.gitignore
+!sender.py
