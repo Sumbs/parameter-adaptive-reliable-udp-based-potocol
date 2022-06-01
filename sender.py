@@ -30,7 +30,7 @@ def parse_ack(ack):
 
 
 def make_msg(idd, sn, txn, last, payload):
-    msg = f"ID{idd}SN{sn:>07d}TXN{txn:>07d}LAST{last}PAYLOAD{payload}"
+    msg = f"ID{idd}SN{sn:>07d}TXN{txn:>07d}LAST{last}{payload}"
     return msg
 
 
