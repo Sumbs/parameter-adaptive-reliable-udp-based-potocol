@@ -47,7 +47,7 @@ def send_payload(udp_socket, txn_number=0, offset=0):
 
     with open(FILE) as file:
         f = file.read()
-        maxlen = int(len(f) * .55)
+        maxlen = len(f)
 
         payload_size = offset
 
