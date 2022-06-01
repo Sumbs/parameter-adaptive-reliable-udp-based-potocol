@@ -72,9 +72,9 @@ def send_payload(udp_socket, txn_number=0, offset=0):
                 ack = parse_ack(data.decode())
                 SN += 1
                 offset += payload_size
-                udp_socket.settimeout(None)
+                udp_socket.settimeout(30)
             except socket.timeout:
-                payload_size = int(payload_size * .95)
+                payload_size = int(payload_size * .90)
                 print(f"payload size: {payload_size} bytes")
 
 
