@@ -93,10 +93,10 @@ def get_max_payload_size(udp_socket, txn_number=0):
         f = file.read()
 
         sent_packets = {}
-        max_payload_size = INF
+        max_payload_size = int(len(f) * .1)
         udp_socket.settimeout(0.5)
 
-        for i in range(35, 0, -1):
+        while True:
             PAYLOAD = f[0:i]
 
             msg = make_msg(ID, SN, TXN, LAST, PAYLOAD)
@@ -108,14 +108,14 @@ def get_max_payload_size(udp_socket, txn_number=0):
             print(f"Checksum: {chksum}")
 
             try:
-                if i == 1:
+                if max_payload_size == 1:
                     udp_socket.settimeout(None)
                 data, addr = udp_socket.recvfrom(2048)
                 ack = parse_ack(data.decode())
                 max_payload_size = sent_packets[ack["chksum"]]
                 break
             except socket.timeout:
-                pass
+                max_payload_size = int(max_payload_size * .9)
         
         # test_list.append(f[0:max_payload_size])
         print(f"\nMax payload size = {max_payload_size} characters")
