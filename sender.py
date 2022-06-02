@@ -6,7 +6,7 @@ import socket
 
 CLIENT_HOSTNAME = socket.gethostbyname(socket.gethostname())
 FILE = "2b97c5ee.txt"  # file to be sent by client
-SERVER_HOSTNAME = "10.0.7.141"
+SERVER_HOSTNAME = "10.0.7.141" # IP address of receiver
 UDP_PORT_SEND = 9000  # sending port for UDP
 UDP_PORT_LISTEN = 6750  # listening port for UDP
 ID = "2b97c5ee"  # unique student ID
