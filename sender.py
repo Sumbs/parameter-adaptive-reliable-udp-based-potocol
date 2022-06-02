@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from hashlib import md5
-from math import inf
 from time import sleep
 import socket
 
@@ -11,8 +10,6 @@ SERVER_HOSTNAME = "10.0.7.141"
 UDP_PORT_SEND = 9000  # sending port for UDP
 UDP_PORT_LISTEN = 6750  # listening port for UDP
 ID = "2b97c5ee"  # unique student ID
-
-INF = inf
 
 
 def announce(msg):
