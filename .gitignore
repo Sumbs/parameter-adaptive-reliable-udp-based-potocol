@@ -1,4 +1,6 @@
 *.pdf
 *.docx
+*.xlsx
+*.tmp
 *.txt
 !2b97c5ee.txt
