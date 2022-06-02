@@ -140,11 +140,19 @@ def begin_transaction():
 if __name__ == "__main__":
     # parse command line arguments
     parser = ArgumentParser()
-    parser.add_argument("-f", help="filename/path of payload")
-    parser.add_argument("-a", help="IP address of receiver")
-    parser.add_argument("-s", help="port used by the receiver", type=int)
-    parser.add_argument("-c", help="port used by the sender", type=int)
-    parser.add_argument("-i", help="unique ID per student")
+    parser.add_argument("-f", help="filename/path of payload", default=FILE)
+    parser.add_argument(
+        "-a",
+        help="IP address of receiver",
+        default=SERVER_HOSTNAME,
+    )
+    parser.add_argument(
+        "-s", help="port used by the server", type=int, default=UDP_PORT_SEND
+    )
+    parser.add_argument(
+        "-c", help="port used by the client", type=int, default=UDP_PORT_LISTEN
+    )
+    parser.add_argument("-i", help="unique ID of student", default=ID)
     args = parser.parse_args()
 
     # initializing global variables
@@ -155,9 +163,11 @@ if __name__ == "__main__":
     ID = args.i
 
     announce("TRANSACTION DETAILS")
+
     print(f"File to send: {FILE}")
     print(f"IP address of server: {SERVER_HOSTNAME}")
     print(f"Port used by server: {UDP_PORT_SEND}")
     print(f"Port used by client: {UDP_PORT_LISTEN}")
     print(f"Unique ID: {ID}")
+
     begin_transaction()
