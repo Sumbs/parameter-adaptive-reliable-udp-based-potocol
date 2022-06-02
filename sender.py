@@ -179,6 +179,7 @@ def begin_transaction():
                 intent_msg.encode(), (SERVER_HOSTNAME, UDP_PORT_SEND)
             )
             data, addr = udp_socket.recvfrom(2048)
+            print(data.decode())
 
             if data.decode() == "Existing alive transaction":
                 print("Existing alive transaction found. Retrying in 10s.")
