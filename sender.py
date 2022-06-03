@@ -200,7 +200,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # initializing global variables
+    # initialize program constants
     FILE = args.f
     SERVER_HOSTNAME = args.a
     UDP_PORT_SEND = args.s
